@@ -7,11 +7,10 @@ const postsRouteHandlers = require('../controllers/posts.js');
 const { getPosts, createPost, deletePosts, deletePostById, updatePostById } =
   postsRouteHandlers;
 
-
+router.delete("/all", deletePosts);
 router
   .get("/", getPosts)
   .post("/", createPost)
-  .delete("/all", deletePosts)
   .delete("/:id", deletePostById)
   .patch("/:id", updatePostById);
 
