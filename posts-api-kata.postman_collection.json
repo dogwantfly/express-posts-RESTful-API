@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "3b2e51f6-ba9c-45a6-809b-b37c706ccd76",
+		"name": "posts-api-kata",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15020220",
+		"_collection_link": "https://crimson-star-716131.postman.co/workspace/2024-node-todolist-api-kata~1b91253b-c08d-4907-8e68-194de6b33687/collection/15020220-3b2e51f6-ba9c-45a6-809b-b37c706ccd76?action=share&source=collection_link&creator=15020220"
+	},
+	"item": [
+		{
+			"name": "取得所有貼文",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base url}}/posts",
+					"host": [
+						"{{base url}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "新增單筆貼文",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"歡迎來到我們的部落格\",\n    \"content\": \"這是我們的第一篇文章，希望你們會喜歡！\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base url}}/posts",
+					"host": [
+						"{{base url}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除全部貼文",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base url}}/posts/all",
+					"host": [
+						"{{base url}}"
+					],
+					"path": [
+						"posts",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除單筆貼文",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base url}}/posts/663096e6f171413fa2da1280",
+					"host": [
+						"{{base url}}"
+					],
+					"path": [
+						"posts",
+						"663096e6f171413fa2da1280"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "編輯單筆貼文",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\": \"test edit content\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base url}}/posts/66309c88f2b11550e2ce46fa",
+					"host": [
+						"{{base url}}"
+					],
+					"path": [
+						"posts",
+						"66309c88f2b11550e2ce46fa"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base url",
+			"value": "https://posts-restful-api-kata.onrender.com",
+			"type": "string"
+		},
+		{
+			"key": "base url",
+			"value": "http://127.0.0.1:3000",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
