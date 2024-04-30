@@ -27,18 +27,15 @@ module.exports = {
   },
 
   deletePosts: async (req, res, next) => { 
-    if (req.originalUrl !== "/posts/all") {
-      return;
-    }
+      if (req.originalUrl === "/posts/") {
+        return errorHandler(res, '請輸入貼文 id');
+      }
     const result = await Post.deleteMany();
     successHandler(res, result);
   },
 
   deletePostById: async (req, res, next) => {
     try {
-      if (req.originalUrl === "/posts/all") {
-        return;
-      }
       const { id } = req.params;
       if (!mongoose.isValidObjectId(id)) {
         return errorHandler(res, '貼文 id 不符合格式或不存在');

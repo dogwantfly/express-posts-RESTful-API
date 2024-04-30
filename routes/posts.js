@@ -5,7 +5,7 @@ const postsControllers = require('../controllers/posts.js');
 router
   .get("/", postsControllers.getPosts)
   .post("/", postsControllers.createPost)
-  .delete("/all", postsControllers.deletePosts)
+  .delete("/", postsControllers.deletePosts)
   .delete("/:id", postsControllers.deletePostById)
   .patch("/:id", postsControllers.updatePostById);
 
