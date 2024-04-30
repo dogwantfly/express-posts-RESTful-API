@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "3b2e51f6-ba9c-45a6-809b-b37c706ccd76",
-		"name": "posts-api-kata",
+		"_postman_id": "005266bb-10e2-4941-87ec-e74ef9e4e02a",
+		"name": "express-posts-RESTful-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "15020220",
-		"_collection_link": "https://crimson-star-716131.postman.co/workspace/2024-node-todolist-api-kata~1b91253b-c08d-4907-8e68-194de6b33687/collection/15020220-3b2e51f6-ba9c-45a6-809b-b37c706ccd76?action=share&source=collection_link&creator=15020220"
+		"_collection_link": "https://crimson-star-716131.postman.co/workspace/2024-node-todolist-api-kata~1b91253b-c08d-4907-8e68-194de6b33687/collection/15020220-005266bb-10e2-4941-87ec-e74ef9e4e02a?action=share&source=collection_link&creator=15020220"
 	},
 	"item": [
 		{
@@ -137,7 +137,7 @@
 	"variable": [
 		{
 			"key": "base url",
-			"value": "https://posts-restful-api-kata.onrender.com",
+			"value": "https://express-posts-restful-api.onrender.com",
 			"type": "string"
 		},
 		{
