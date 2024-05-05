@@ -1,35 +1,48 @@
 const mongoose = require('mongoose');
 const Post = require('../models/posts');
+const User = require('../models/users');
+
 const { successHandler, errorHandler } = require('../utils/responseHandler');
 
 module.exports = {
   getPosts: async (req, res, next) => {
-    const posts = await Post.find();
+    const posts = await Post.find().populate('user');
     successHandler(res, posts);
   },
 
   createPost: async (req, res, next) => {
     try {
-      const { title, content } = req.body;
-      if (content !== undefined && title !== undefined) {
-        const newPost = {
-          title,
-          content,
-        };
-          const result = await Post.create(newPost);
-          successHandler(res, result, 201);
-        } else {
-          errorHandler(res);
-        }
-      } catch (error) {
-        errorHandler(res, error);
+      const { content, user, type, tags, image } = req.body;
+      console.log(req.body.user);
+      if (!mongoose.isValidObjectId(user)) {
+        return errorHandler(res, '使用者 id 不符合格式或不存在');
       }
+      const existingUser = await User.findById(user);
+      if (!existingUser) {
+        return errorHandler(res, '使用者 id 不存在');
+      }
+      if (content !== undefined) {
+        const newPost = {
+          content,
+          user,
+          type,
+          tags,
+          image,
+        };
+        const result = await Post.create(newPost);
+        successHandler(res, result, 201);
+      } else {
+        errorHandler(res, '缺少必要的貼文內容');
+      }
+    } catch (error) {
+      errorHandler(res, error);
+    }
   },
 
-  deletePosts: async (req, res, next) => { 
-      if (req.originalUrl === "/posts/") {
-        return errorHandler(res, '請輸入貼文 id');
-      }
+  deletePosts: async (req, res, next) => {
+    if (req.originalUrl === '/posts/') {
+      return errorHandler(res, '請輸入貼文 id');
+    }
     const result = await Post.deleteMany();
     successHandler(res, result);
   },
