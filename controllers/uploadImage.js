@@ -40,7 +40,7 @@ module.exports = {
 
         // 如果上傳過程中發生錯誤，會觸發 error 事件
         blobStream.on('error', (err) => {
-          res.status(500).send('上傳失敗');
+          errorHandler(res, '上傳失敗', 500)
         });
 
         // 將檔案的 buffer 寫入 blobStream

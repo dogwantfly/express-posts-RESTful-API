@@ -6,7 +6,7 @@ const { successHandler, errorHandler } = require('../utils/responseHandler');
 
 module.exports = {
   getPosts: async (req, res, next) => {
-    const posts = await Post.find().populate('user');
+    const posts = await Post.find().populate('user').sort({createdAt: -1});
     successHandler(res, posts);
   },
 
