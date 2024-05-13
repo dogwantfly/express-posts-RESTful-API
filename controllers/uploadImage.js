@@ -16,7 +16,7 @@ module.exports = {
       }
       try {
         if(!req.files.length) {
-          return next(appError(400,"尚未上傳檔案",next));
+          return next(new Error("尚未上傳檔案"));
         }
         // 取得上傳的檔案資訊列表裡面的第一個檔案
         const file = req.files[0];
@@ -34,13 +34,16 @@ module.exports = {
           };
           // 取得檔案的網址
           blob.getSignedUrl(config, (err, fileUrl) => {
+            if (err) {
+              return errorHandler(res, err.message, 500);
+            }
             successHandler(res, { url: fileUrl });
           });
         });
 
         // 如果上傳過程中發生錯誤，會觸發 error 事件
         blobStream.on('error', (err) => {
-          errorHandler(res, '上傳失敗', 500)
+          errorHandler(res, `上傳失敗：${err}`, 500)
         });
 
         // 將檔案的 buffer 寫入 blobStream
