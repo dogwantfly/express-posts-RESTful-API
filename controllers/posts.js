@@ -6,8 +6,21 @@ const { successHandler, errorHandler } = require('../utils/responseHandler');
 
 module.exports = {
   getPosts: async (req, res, next) => {
-    const posts = await Post.find().populate('user').sort({createdAt: -1});
-    successHandler(res, posts);
+    try {
+      const { sortBy = 'createdAt', order = 'desc', content } = req.query;
+
+      let query = {};
+      if (content) {
+        query.content = { $regex: content, $options: 'i' }; // 不區分大小寫的部分匹配
+      }
+
+      const posts = await Post.find(query).populate('user').sort({ [sortBy]: order === 'desc' ? -1 : 1 });
+      successHandler(res, posts);
+
+    } catch (error) {
+      errorHandler(res, error)
+    }
+   
   },
 
   createPost: async (req, res, next) => {
