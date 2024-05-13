@@ -2,22 +2,11 @@ const path = require('path');
 const multer = require('multer');
 const { ImgurClient } = require('imgur');
 const { successHandler, errorHandler } = require('../utils/responseHandler');
+const upload = require('../service/image');
+const { v4: uuidv4 } = require('uuid');
+const firebaseAdmin = require('../service/firebase');
+const bucket = firebaseAdmin.storage().bucket();
 
-const upload = multer({
-  limits: {
-    fileSize: 2 * 1024 * 1024,
-  },
-  fileFilter(req, file, cb) {
-    const ext = path.extname(file.originalname).toLowerCase();
-    if (ext !== '.jpg' && ext !== '.png' && ext !== '.jpeg') {
-      return cb(
-        new Error('檔案格式錯誤，僅限上傳 jpg、jpeg 與 png 格式。'),
-        false
-      );
-    }
-    cb(null, true);
-  },
-}).any();
 
 module.exports = {
   uploadImage: function (req, res, next) {
@@ -26,17 +15,38 @@ module.exports = {
         return errorHandler(res, error);
       }
       try {
-        const client = new ImgurClient({
-          clientId: process.env.IMGUR_CLIENTID,
-          clientSecret: process.env.IMGUR_CLIENT_SECRET,
-          refreshToken: process.env.IMGUR_REFRESH_TOKEN,
+        if(!req.files.length) {
+          return next(appError(400,"尚未上傳檔案",next));
+        }
+        // 取得上傳的檔案資訊列表裡面的第一個檔案
+        const file = req.files[0];
+        // 基於檔案的原始名稱建立一個 blob 物件
+        const blob = bucket.file(`images/${uuidv4()}.${file.originalname.split('.').pop()}`);
+        // 建立一個可以寫入 blob 的物件
+        const blobStream = blob.createWriteStream()
+
+        // 監聽上傳狀態，當上傳完成時，會觸發 finish 事件
+        blobStream.on('finish', () => {
+          // 設定檔案的存取權限
+          const config = {
+            action: 'read', // 權限
+            expires: '12-31-2500', // 網址的有效期限
+          };
+          // 取得檔案的網址
+          blob.getSignedUrl(config, (err, fileUrl) => {
+            successHandler(res, { url: fileUrl });
+          });
         });
-        const response = await client.upload({
-          image: req.files[0].buffer.toString('base64'),
-          type: 'base64',
-          album: process.env.IMGUR_ALBUM_ID,
+
+        // 如果上傳過程中發生錯誤，會觸發 error 事件
+        blobStream.on('error', (err) => {
+          res.status(500).send('上傳失敗');
         });
-        successHandler(res, { url: response.data.link });
+
+        // 將檔案的 buffer 寫入 blobStream
+        blobStream.end(file.buffer);
+        
+        
       } catch (error) {
         return errorHandler(res, error);
       }
