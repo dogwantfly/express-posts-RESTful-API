@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const { errorHandler } = require('./utils/responseHandler');
+
 
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE.replace(

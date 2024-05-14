@@ -5,20 +5,16 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const { errorHandler } = require('./utils/responseHandler');
+require('./connection');
+const appError = require("./statusHandle/appError"); 
+const { resErrorProd, resErrorDev } = require('./utils/responseHandler');
 
-dotenv.config({ path: './config.env' });
-const DB = process.env.DATABASE.replace(
-  '<password>',
-  process.env.DATABASE_PASSWORD
-);
-
-mongoose
-  .connect(DB)
-  .then(() => console.log('Connected to MongoDB...'))
-  .catch((err) => console.error('Could not connect to MongoDB...', err));
+process.on('uncaughtException', err => {
+  // 記錄錯誤下來，等到服務都處理完後，停掉該 process
+    console.error('Uncaughted Exception！')
+    console.error(err);
+    process.exit(1);
+});
 
 const postsRouter = require('./routes/posts');
 const uploadImageRouter = require('./routes/uploadImage');
@@ -41,25 +37,33 @@ app.use('/api/v1/uploadImage', uploadImageRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+  next(appError(404, "無此頁面資訊，請重新回到首頁"))
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  const statusCode = err.status || 500; // Default to 500 if not provided
-
-  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-    // Specific handler for request body syntax errors
-    return errorHandler(res, err.message, err.status);
+  err.statusCode = err.statusCode || 500;
+  // 開發環境
+  if (process.env.NODE_ENV === 'dev') {
+    return resErrorDev(err, res);
   }
-  const errorMessage =
-    req.app.get('env') === 'development' ? err.message : 'An error occurred';
-  console.error('Error status:', statusCode, 'Error details:', err.message);
-  return errorHandler(res, errorMessage, statusCode);
+  // 正式環境
+  if(err.isAxiosError == true){
+    err.message = "axios 連線錯誤";
+    err.isOperational = true;
+    return resErrorProd(err, res)
+  } else if (err.name === 'ValidationError'){
+    // mongoose 資料辨識錯誤
+    err.message = "資料欄位未填寫正確，請重新輸入！";
+    err.isOperational = true;
+    return resErrorProd(err, res)
+  }
+  resErrorProd(err, res)
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('未捕捉到的 rejection：', promise, '原因：', reason);
+  // 記錄於 log 上
 });
 
 module.exports = app;
