@@ -14,13 +14,13 @@ module.exports = {
       console.log(error)
       if (error && error instanceof multer.MulterError) {
         if (error.code === 'LIMIT_FILE_SIZE') {
-        return next(appError(400, "檔案大小不能超過 2MB"))  
+        return next(new appError(400, "檔案大小不能超過 2MB"))  
         }
       } else if (error) {
-        next(appError(500, error.message))
+        next(new appError(500, error.message))
       }
       if(!req.files.length) {
-        return next(appError(400, "尚未上傳檔案"));
+        return next(new appError(400, "尚未上傳檔案"));
       }
       // 取得上傳的檔案資訊列表裡面的第一個檔案
       const file = req.files[0];
@@ -39,7 +39,7 @@ module.exports = {
         // 取得檔案的網址
         blob.getSignedUrl(config, (err, fileUrl) => {
           if (err) {
-            return next(appError(500, err.message));
+            return next(new appError(500, err.message));
           }
           successHandler(res, { url: fileUrl });
         });
@@ -47,7 +47,7 @@ module.exports = {
 
       // 如果上傳過程中發生錯誤，會觸發 error 事件
       blobStream.on('error', (err) => {
-        next(appError(500, `上傳失敗：${err}`))
+        next(new appError(500, `上傳失敗：${err}`))
       });
 
       // 將檔案的 buffer 寫入 blobStream

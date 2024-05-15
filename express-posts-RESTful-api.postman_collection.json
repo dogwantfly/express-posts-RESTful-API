@@ -84,13 +84,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{base url}}/posts/663096e6f171413fa2da1280",
+					"raw": "{{base url}}/posts/663721dc28bd11004e0bca46",
 					"host": [
 						"{{base url}}"
 					],
 					"path": [
 						"posts",
-						"663096e6f171413fa2da1280"
+						"663721dc28bd11004e0bca46"
 					]
 				}
 			},
@@ -111,13 +111,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{base url}}/posts/66309c88f2b11550e2ce46fa",
+					"raw": "{{base url}}/posts/664411825a3eb389fe4df8c4",
 					"host": [
 						"{{base url}}"
 					],
 					"path": [
 						"posts",
-						"66309c88f2b11550e2ce46fa"
+						"664411825a3eb389fe4df8c4"
 					]
 				}
 			},
@@ -134,7 +134,7 @@
 						{
 							"key": "image",
 							"type": "file",
-							"src": "/C:/Users/HSINYUCHEN/Downloads/IMG_6939.png"
+							"src": "/C:/Users/HSINYUCHEN/Downloads/sunrise.ico"
 						}
 					]
 				},
