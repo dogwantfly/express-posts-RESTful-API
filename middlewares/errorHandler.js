@@ -2,7 +2,7 @@ const AppError = require('../statusHandle/appError');
 const { resErrorProd, resErrorDev } = require('../utils/responseHandler');
 
 const handleValidationError = (err) => {
-  const message = '資料欄位未填寫正確，請重新輸入！';
+  const message = err ||'資料欄位不符合正確格式，請重新輸入！';
   return new AppError(400, message);
 };
 
