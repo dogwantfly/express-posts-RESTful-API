@@ -30,6 +30,9 @@ module.exports = {
     if (!validator.isEmail(email)) {
       return next(new appError(400, 'Email 格式不正確'));
     }
+    if (!validator.isLength(name.trim(), { min: 2 })) {
+      return next(new appError(400, '暱稱至少 2 個字元以上'));
+    }
 
     // 加密密碼
     password = await bcrypt.hash(password, 12);
