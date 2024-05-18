@@ -17,6 +17,10 @@ module.exports = {
     if (!email || !password || !confirmPassword || !name) {
       return next(new appError(400, '欄位未填寫正確！'));
     }
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return next(new appError(400, '帳號已存在'));
+    }
     // 密碼正確
     if (password !== confirmPassword) {
       return next(new appError(400, '密碼不一致！'));
