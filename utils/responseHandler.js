@@ -1,5 +1,5 @@
-
 function successHandler(res, data, statusCode = 200) {
+  if (res.headersSent) return;
   res.status(statusCode).json({ status: true, data });
 }
 
@@ -10,7 +10,7 @@ const resErrorProd = (err, res) => {
 
   res.status(statusCode).json({
     status: 'error',
-    message: message
+    message: message,
   });
 };
 
@@ -25,12 +25,12 @@ const resErrorDev = (err, req, res) => {
     method: req.method,
     path: req.originalUrl,
     query: req.query,
-    body: req.body
+    body: req.body,
   });
 };
 
 module.exports = {
   successHandler,
   resErrorProd,
-  resErrorDev
+  resErrorDev,
 };

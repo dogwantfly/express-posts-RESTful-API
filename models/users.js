@@ -21,17 +21,18 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: 'https://via.placeholder.com/150',
+      default:
+        'https://firebasestorage.googleapis.com/v0/b/metawall-social-media.appspot.com/o/images%2FEllipse%201.png?alt=media&token=aeb4001f-2ae2-46f7-a937-b31ad3cdaf69',
     },
-    sex:{
+    sex: {
       type: String,
-      enum:["male", "female"]
+      enum: ['male', 'female'],
     },
-    password:{
+    password: {
       type: String,
       required: [true, '請輸入密碼'],
       minlength: 8,
-      select: false
+      select: false,
     },
   },
   { versionKey: false, timestamps: true }
