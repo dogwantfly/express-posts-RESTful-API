@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const handleErrorAsync = require('../statusHandle/handleErrorAsync');
 const { isAuth } = require('../statusHandle/auth');
 const UserControllers = require('../controllers/users.js');
