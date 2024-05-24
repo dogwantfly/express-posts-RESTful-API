@@ -16,10 +16,12 @@ const postSchema = new mongoose.Schema(
       type: String,
       default: 'https://via.placeholder.com/150',
     },
-    likes: {
-      type: Number,
-      default: 0,
-    },
+    likes: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
     type: {
       type: String,
       enum: ['group', 'person'],
@@ -34,6 +36,13 @@ const postSchema = new mongoose.Schema(
           },
           message: '貼文標籤 tags 未填寫',
         },
+      },
+    ],
+    comments: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        text: { type: String, required: true },
+        createdAt: { type: Date, default: Date.now },
       },
     ],
   },

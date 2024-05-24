@@ -34,6 +34,36 @@ const userSchema = new mongoose.Schema(
       minlength: 8,
       select: false,
     },
+    followers: [
+      {
+        user: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    following: [
+      {
+        user: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    likes: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Post',
+      },
+    ],
   },
   { versionKey: false, timestamps: true }
 );

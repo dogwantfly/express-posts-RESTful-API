@@ -8,10 +8,75 @@
 	},
 	"item": [
 		{
-			"name": "posts",
+			"name": "動態貼文",
 			"item": [
 				{
-					"name": "上傳圖片",
+					"name": "取得所有貼文",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/posts?order=desc&content",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "order",
+									"value": "desc"
+								},
+								{
+									"key": "content",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得單筆貼文",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/posts/664f0884856d343c25d5aaf3",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"posts",
+								"664f0884856d343c25d5aaf3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增單筆貼文",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -26,25 +91,170 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "image",
-									"type": "file",
-									"src": "/Users/hsinyu/Downloads/IMG_6945.JPG"
+							"mode": "raw",
+							"raw": "{\n    \"user\": \"664847b6dc6ae2a3362d7ceb\",\n    \"content\": \"這是我們的第一篇文章，希望你們會喜歡！\",\n    \"type\": \"group\",\n    \"tags\": [\"隨筆\", \"心情\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
-							"raw": "{{base url}}/api/v1/uploadImage/",
+							"raw": "{{base url}}/posts",
 							"host": [
 								"{{base url}}"
 							],
 							"path": [
-								"api",
-								"v1",
-								"uploadImage",
-								""
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增單筆貼文讚",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/posts/:postId/like",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"posts",
+								":postId",
+								"like"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": "664f0884856d343c25d5aaf3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "刪除單筆貼文讚",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/posts/:postId/unlike",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"posts",
+								":postId",
+								"unlike"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": "664f0884856d343c25d5aaf3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增單筆貼文留言",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comment\": \"新增留言 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base url}}/posts/:postId/comment",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"posts",
+								":postId",
+								"comment"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": "664f0884856d343c25d5aaf3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得使用者全部貼文",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/posts/user/:userId",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"posts",
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "664847b6dc6ae2a3362d7ceb"
+								}
 							]
 						}
 					},
@@ -142,84 +352,11 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "新增單筆貼文",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{bearer token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"user\": \"664847b6dc6ae2a3362d7ceb\",\n    \"content\": \"這是我們的第一篇文章，希望你們會喜歡！\",\n    \"type\": \"group\",\n    \"tags\": [\"隨筆\", \"心情\"]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base url}}/posts",
-							"host": [
-								"{{base url}}"
-							],
-							"path": [
-								"posts"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "取得所有貼文",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{bearer token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base url}}/posts?order=desc&content",
-							"host": [
-								"{{base url}}"
-							],
-							"path": [
-								"posts"
-							],
-							"query": [
-								{
-									"key": "order",
-									"value": "desc"
-								},
-								{
-									"key": "content",
-									"value": null
-								}
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
 		{
-			"name": "users",
+			"name": "會員功能",
 			"item": [
 				{
 					"name": "註冊",
@@ -228,7 +365,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"test2@mail.com\",\r\n    \"password\": \"testtest\",\r\n    \"confirmPassword\": \"testtest\",\r\n    \"name\": \"test\"\r\n}",
+							"raw": "{\r\n    \"email\": \"test5@mail.com\",\r\n    \"password\": \"testtest123\",\r\n    \"confirmPassword\": \"testtest123\",\r\n    \"name\": \"test\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -255,7 +392,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"test2@mail.com\",\r\n    \"password\": \"testtest\"\r\n}",
+							"raw": "{\r\n    \"email\": \"test2@mail.com\",\r\n    \"password\": \"testtest123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -390,6 +527,182 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "會員按讚追蹤動態",
+			"item": [
+				{
+					"name": "追蹤其他使用者",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/users/:userId/follow",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"follow"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "6635bca51e5c511412a293bc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取消追蹤其他使用者",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/users/:userId/unfollow",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"unfollow"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "6635bca51e5c511412a293bc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得使用者按讚貼文列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/users/getLikeList",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"users",
+								"getLikeList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得使用者追蹤名單",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/users/following",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"users",
+								"following"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "上傳圖片",
+			"item": [
+				{
+					"name": "上傳圖片",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/HSINYUCHEN/Downloads/excel.ico"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base url}}/api/v1/uploadImage/",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"uploadImage",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -416,17 +729,18 @@
 		{
 			"key": "base url",
 			"value": "http://127.0.0.1:3000",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
 			"key": "base url",
 			"value": "https://express-posts-restful-api.onrender.com",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		},
 		{
 			"key": "bearer token",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDg0N2I2ZGM2YWUyYTMzNjJkN2NlYiIsImlhdCI6MTcxNjAxNzE3NiwiZXhwIjoxNzE2NDQ5MTc2fQ.BUFSkPacyt5huzV6pjGFedlNjUkptRVdniRdmKZSQkU"
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NGZmZTBlODFiYzdjMzQ1Y2EyOWJlYSIsImlhdCI6MTcxNjUxODQxNCwiZXhwIjoxNzE2OTUwNDE0fQ.JQrkVaLrrrWmEW69PwE4WvbBzrEujnZPNUqtWUun2vo",
+			"type": "string"
 		}
 	]
 }

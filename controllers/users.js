@@ -108,4 +108,112 @@ module.exports = {
 
     successHandler(res, user);
   },
+  followUser: async (req, res, next) => {
+    const targetUserId = req.params.userId;
+    const userId = req.user.id;
+    if (userId === targetUserId) {
+      return next(new appError(400, '不能追蹤自己'));
+    }
+    const targetUser = await User.findById(targetUserId);
+    const user = await User.findById(userId);
+    if (!targetUser) {
+      return next(new appError(404, '找不到該用戶'));
+    }
+
+    const hasFollowed =
+      targetUser.followers.some(
+        (follower) => follower.user?.toString() === userId
+      ) ||
+      user.following.some(
+        (following) => following.user?.toString() === targetUserId
+      );
+
+    if (hasFollowed) {
+      return next(new appError(400, '已追蹤此用戶'));
+    }
+    await User.updateOne(
+      {
+        _id: userId,
+        'following.user': { $ne: targetUserId },
+      },
+      {
+        $addToSet: { following: { user: targetUserId } },
+      }
+    );
+
+    await User.updateOne(
+      {
+        _id: targetUserId,
+        'followers.user': { $ne: userId },
+      },
+      {
+        $addToSet: { followers: { user: userId } },
+      }
+    );
+
+    successHandler(res, { message: '成功追蹤用戶' });
+  },
+  unfollowUser: async (req, res, next) => {
+    const targetUserId = req.params.userId;
+    const userId = req.user.id;
+
+    if (userId === targetUserId) {
+      return next(new appError(400, '不能取消追蹤自己'));
+    }
+
+    const targetUser = await User.findById(targetUserId);
+    if (!targetUser) {
+      return next(new appError(404, '找不到該用戶'));
+    }
+
+    const user = await User.findById(userId);
+    const notFollowing =
+      !user.following.some((f) => f.user?.toString() === targetUserId) &&
+      !targetUser.followers.some((f) => f.user?.toString() === userId);
+    if (notFollowing) {
+      return next(new appError(404, '未追蹤此用戶，無法取消追蹤'));
+    }
+
+    await User.updateOne(
+      { _id: userId },
+      { $pull: { following: { user: targetUserId } } }
+    );
+    await User.updateOne(
+      { _id: targetUserId },
+      { $pull: { followers: { user: userId } } }
+    );
+
+    successHandler(res, { message: '成功取消追蹤用戶' });
+  },
+  getLikeList: async (req, res, next) => {
+    const userId = req.user.id;
+    const user = await User.findById(userId).populate({
+      path: 'likes',
+      model: 'Post',
+      select: 'title content image',
+    });
+
+    if (!user) {
+      return next(new appError(400, '用戶不存在'));
+    }
+    successHandler(res, {
+      likes: user.likes,
+    });
+  },
+  getFollowingList: async (req, res, next) => {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).populate({
+      path: 'following',
+      model: 'User',
+      select: 'name avatar',
+    });
+
+    if (!user) {
+      return next(new appError(404, '用戶不存在'));
+    }
+    successHandler(res, {
+      following: user.following,
+    });
+  },
 };
