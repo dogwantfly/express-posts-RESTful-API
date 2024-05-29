@@ -19,6 +19,7 @@ module.exports = {
         path: 'comments.user',
         select: 'name avatar'
       })
+      .populate('likes', 'name')
       .sort({ [sortBy]: order === 'desc' ? -1 : 1 });
     successHandler(res, posts);
   },
@@ -122,7 +123,7 @@ module.exports = {
       return next(new appError(404, '找不到該貼文'));
     }
 
-    if (post.likes.some((like) => like.toString() === userId)) {
+    if (post?.likes.some((like) => like.toString() === userId)) {
       return next(new appError(400, '已經點過讚了'));
     }
 
