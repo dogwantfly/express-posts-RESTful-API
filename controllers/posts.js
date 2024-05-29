@@ -15,6 +15,10 @@ module.exports = {
 
     const posts = await Post.find(query)
       .populate('user')
+      .populate({
+        path: 'comments.user',
+        select: 'name avatar'
+      })
       .sort({ [sortBy]: order === 'desc' ? -1 : 1 });
     successHandler(res, posts);
   },
