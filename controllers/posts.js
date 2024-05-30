@@ -186,14 +186,14 @@ module.exports = {
     };
     post.comments.push(newComment);
     await post.save();
-    await post.populate({
+    const populatedPost = await Post.findById(post._id).populate({
       path: 'comments.user',
       select: 'name avatar'
-    }).exec();
+    });
     successHandler(
       res,
       {
-        post,
+        post: populatedPost,
       },
       201
     );
