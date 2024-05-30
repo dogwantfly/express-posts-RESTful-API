@@ -186,6 +186,10 @@ module.exports = {
     };
     post.comments.push(newComment);
     await post.save();
+    await post.populate({
+      path: 'comments.user',
+      select: 'name avatar'
+    }).exec();
     successHandler(
       res,
       {
