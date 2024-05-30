@@ -204,7 +204,7 @@ module.exports = {
     const userId = req.user.id;
 
     const user = await User.findById(userId).populate({
-      path: 'following',
+      path: 'following.user',
       model: 'User',
       select: 'name avatar',
     });
