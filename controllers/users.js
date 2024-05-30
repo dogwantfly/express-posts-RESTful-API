@@ -213,7 +213,7 @@ module.exports = {
       return next(new appError(404, '用戶不存在'));
     }
     successHandler(res, {
-      following: user.following,
+      following: user,
     });
   },
 };
