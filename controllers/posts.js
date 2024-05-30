@@ -131,7 +131,7 @@ module.exports = {
       postId,
       { $addToSet: { likes: userId } },
       { new: true, runValidators: true } // 確保返回更新後的文檔並執行模型驗證
-    );
+    ).populate('likes', 'name avatar');
 
     successHandler(res, {
       likes: updatedPost.likes,
@@ -158,7 +158,7 @@ module.exports = {
       postId,
       { $pull: { likes: userId } },
       { new: true, runValidators: true }
-    );
+    ).populate('likes', 'name avatar');
 
     successHandler(res, { likes: updatedPost.likes });
   },
