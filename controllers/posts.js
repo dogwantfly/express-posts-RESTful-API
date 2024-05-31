@@ -17,7 +17,7 @@ module.exports = {
       .populate('user')
       .populate({
         path: 'comments.user',
-        select: 'name avatar'
+        select: 'name avatar',
       })
       .populate('likes', 'name')
       .sort({ [sortBy]: order === 'desc' ? -1 : 1 });
@@ -200,7 +200,7 @@ module.exports = {
     await post.save();
     const populatedPost = await Post.findById(post._id).populate({
       path: 'comments.user',
-      select: 'name avatar'
+      select: 'name avatar',
     });
     successHandler(
       res,
@@ -223,6 +223,7 @@ module.exports = {
     }
     successHandler(res, {
       posts,
+      user: req.user,
     });
   },
 };
