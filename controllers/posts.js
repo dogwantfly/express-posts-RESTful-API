@@ -217,16 +217,17 @@ module.exports = {
       next(new appError(400, '用戶 id 不符合格式或不存在'));
     }
 
-    const posts = await Post.find({ user: userId })
-      .sort({ createdAt: -1 })
-      .populate({
-        path: 'user',
-      });
+    const posts = await Post.find({ user: userId }).sort({ createdAt: -1 });
+    const user = await User.findById(userId);
+    if (!user) {
+      return next(new appError(404, '找不到此用戶'));
+    }
     if (!posts.length) {
       return next(new appError(404, '找不到此用戶的貼文'));
     }
     successHandler(res, {
       posts,
+      user,
     });
   },
 };
