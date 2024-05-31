@@ -194,6 +194,11 @@ module.exports = {
     const user = await User.findById(userId).populate({
       path: 'likes',
       model: 'Post',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: 'name avatar',
+      },
     });
 
     if (!user) {
