@@ -5,6 +5,7 @@ const firebaseAdmin = require('../service/firebase');
 const bucket = firebaseAdmin.storage().bucket();
 const multer = require('multer');
 const appError = require('../statusHandle/appError');
+const sizeOf = require('image-size');
 
 module.exports = {
   uploadImage: async function (req, res, next) {
@@ -26,6 +27,13 @@ module.exports = {
       // 取得上傳的檔案資訊列表裡面的第一個檔案
       const file = req.files[0];
       // 基於檔案的原始名稱建立一個 blob 物件
+      // 檢查是否為 avatar 上傳
+      if (req.body.type === 'avatar') {
+        const dimensions = sizeOf(file.buffer);
+        if (dimensions.width !== dimensions.height || dimensions.width < 300 || dimensions.height < 300) {
+          return next(new appError(400, '圖片寬高比需為 1:1 並最少為 300px * 300px'));
+        }
+      }
       const blob = bucket.file(
         `images/${uuidv4()}.${file.originalname.split('.').pop()}`
       );
