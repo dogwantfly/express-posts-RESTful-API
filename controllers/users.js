@@ -194,7 +194,6 @@ module.exports = {
     const user = await User.findById(userId).populate({
       path: 'likes',
       model: 'Post',
-      select: 'title content image',
     });
 
     if (!user) {

@@ -133,6 +133,12 @@ module.exports = {
       { new: true, runValidators: true } // 確保返回更新後的文檔並執行模型驗證
     ).populate('likes', 'name avatar');
 
+    await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { likes: postId } },
+      { new: true, runValidators: true }
+    );
+
     successHandler(res, {
       likes: updatedPost.likes,
     });
@@ -159,6 +165,12 @@ module.exports = {
       { $pull: { likes: userId } },
       { new: true, runValidators: true }
     ).populate('likes', 'name avatar');
+
+    await User.findByIdAndUpdate(
+      userId,
+      { $pull: { likes: postId } },
+      { new: true, runValidators: true }
+    );
 
     successHandler(res, { likes: updatedPost.likes });
   },
