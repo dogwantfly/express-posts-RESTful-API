@@ -80,7 +80,7 @@ module.exports = {
     successHandler(res, req.user);
   },
   updateProfile: async (req, res, next) => {
-    const { name, sex } = req.body;
+    const { name, sex, avatar } = req.body;
     if (!name) {
       return next(new appError(400, '暱稱不可為空'));
     }
@@ -93,12 +93,16 @@ module.exports = {
     if (!isSexInEnum(sex, validSexValues)) {
       return next(new appError(400, '性別填寫錯誤'));
     }
+    if (avatar && !validator.isURL(avatar, { protocols: ['https'] })) {
+      return next(new appError(400, 'avatar 必須是 https URL'));
+    }
 
     const user = await User.findByIdAndUpdate(
       req.user.id,
       {
         name,
         sex,
+        avatar,
       },
       { new: true, runValidators: true }
     );
