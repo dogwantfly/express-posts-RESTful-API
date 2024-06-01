@@ -222,8 +222,24 @@ module.exports = {
     if (!mongoose.isValidObjectId(userId)) {
       next(new appError(400, '用戶 id 不符合格式或不存在'));
     }
+    const { sortBy = 'createdAt', order = 'desc', content } = req.query;
+    let query = {
+      user: userId,
+    };
+    if (content) {
+      query.content = { $regex: content, $options: 'i' }; // 不區分大小寫的部分匹配
+    }
 
-    const posts = await Post.find({ user: userId }).sort({ createdAt: -1 });
+    const posts = await Post.find(query)
+      .sort({
+        [sortBy]: order === 'desc' ? -1 : 1,
+      })
+      .populate('user')
+      .populate({
+        path: 'comments.user',
+        select: 'name avatar',
+      })
+      .populate('likes', 'name');
     const user = await User.findById(userId);
     if (!user) {
       return next(new appError(404, '找不到此用戶'));
