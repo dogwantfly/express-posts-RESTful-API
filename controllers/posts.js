@@ -244,9 +244,9 @@ module.exports = {
     if (!user) {
       return next(new appError(404, '找不到此用戶'));
     }
-    if (!posts.length) {
-      return next(new appError(404, '找不到此用戶的貼文'));
-    }
+    // if (!posts.length) {
+    //   return next(new appError(404, '找不到此用戶的貼文'));
+    // }
     successHandler(res, {
       posts,
       user,
