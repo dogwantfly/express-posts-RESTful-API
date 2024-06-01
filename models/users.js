@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default:
-        'https://firebasestorage.googleapis.com/v0/b/metawall-social-media.appspot.com/o/images%2FEllipse%201.png?alt=media&token=aeb4001f-2ae2-46f7-a937-b31ad3cdaf69',
+        'https://firebasestorage.googleapis.com/v0/b/metawall-social-media.appspot.com/o/images%2Fuser_default%402x.png?alt=media&token=91fce5a4-14a1-40e5-bfb6-4c6b2a69e0af',
     },
     sex: {
       type: String,
