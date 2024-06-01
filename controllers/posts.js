@@ -31,7 +31,13 @@ module.exports = {
       next(new appError(400, '貼文 id 不符合格式或不存在'));
     }
 
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId)
+      .populate('user')
+      .populate({
+        path: 'comments.user',
+        select: 'name avatar',
+      })
+      .populate('likes', 'name');
     if (!post) {
       return next(new AppError(404, '找不到該貼文'));
     }
